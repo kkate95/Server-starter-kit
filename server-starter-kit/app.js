@@ -8,6 +8,10 @@ let express = require('express'),
 let index = require('./routes/index'),
     users = require('./routes/users');
 
+let Err = require('./utils/errors'),
+    BaseError = require('./utils/errors/BaseError');
+
+
 let app = express();
 
 // view engine setup
@@ -27,14 +31,17 @@ app.use('/users', users);
 
 
 app.use(function(req, res, next) {
-  let err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    next(new Err.NotFound('ERR_ROUTE_NOT_FOUND'));
 });
 
 
 app.use(function(err, req, res, next) {
-    logger.error(err)
+    logger.error(err);
+
+    if (!(err instanceof BaseError)) {
+        err = new Err.Internal('ERR_INTERNAL');
+    }
+
     res.status(err.status || 500).json(err);
 });
 
