@@ -11,10 +11,7 @@ let log = bunyan.createLogger({
         },
     ]
 });
-/*
+
 module.exports = {
-  logError: (args) => log.error("ERROR", args)
-};*/
-
-
-log.info("bla bla")
+  logError: (...args) => log.error("ERROR: ", ...args)
+};
