@@ -1,0 +1,4 @@
+{"name":"myapp","hostname":"DESKTOP-MF3C72O","pid":13796,"level":50,"msg":"bla bla","time":"2018-03-10T04:43:40.154Z","v":0}
+{"name":"myapp","hostname":"DESKTOP-MF3C72O","pid":13556,"level":30,"msg":"bla bla","time":"2018-03-10T04:50:09.909Z","v":0}
+{"name":"myapp","hostname":"DESKTOP-MF3C72O","pid":11404,"level":30,"msg":"bla bla","time":"2018-03-10T04:51:07.765Z","v":0}
+{"name":"myapp","hostname":"DESKTOP-MF3C72O","pid":11488,"level":30,"msg":"bla bla","time":"2018-03-10T04:52:55.739Z","v":0}
