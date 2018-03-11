@@ -1,16 +1,27 @@
 
+require('dotenv').config({ path: './server-starter-kit/config/.env', silent: 'true' });
+
 let app = require('../app'),
      debug = require('debug')('server-starter-kit:server'),
      http = require('http'),
-     logger = require('../utils/logger');
+     logger = require('../utils/logger'),
+     db = require('../utils/db');
 
 let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 let server = http.createServer(app);
 
-server.listen(port);
-logger.info('Server is running');
+db.init()
+    .then(() => {
+        server.listen(port);
+        logger.info('Server is running');
+    })
+    .catch(err => {
+        logger.error(err);
+        process.exit(1);
+    });
+
 
 server.on('error', onError);
 server.on('listening', onListening);
