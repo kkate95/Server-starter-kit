@@ -24,6 +24,7 @@ let generalCodes = {
     ERR_QUERY_FAILED:                               "Ошибка при выполнении запроса к БД",
     ERR_BAD_REQUEST:                                "Неверные данные при запросе",
     ERR_WRONG_LOGIN_OR_PASSWORD:                    "Неверный логин или пароль",
+    ERR_WRONG_PASSWORD:                             "Неверный пароль",
 
     ERR_INTERNAL:                                   "Ошибка на сервере",
 

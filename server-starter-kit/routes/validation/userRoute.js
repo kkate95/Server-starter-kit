@@ -20,6 +20,14 @@ let schema = {
         body: {
             refresh_token: common.refresh_token.required()
         }
+    },
+
+    change_password: {
+        body: {
+            old_password: common.password.required(),
+            new_password: common.password.required(),
+            refresh_token: common.refresh_token.required()
+        }
     }
 
 };

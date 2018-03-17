@@ -51,6 +51,24 @@ module.exports = {
         repo.logoutUser(req.body.refresh_token)
             .then(() => res.end() )
             .catch(err => next(err))
+    },
+
+    changePassword: (req, res, next) => {
+        let req_body = req.body;
+        let user_id = parseInt(req_body.refresh_token.split('.')[0], 10);
+
+        repo.checkUserPassword(user_id, req_body.old_password)
+            .then(result => {
+                if (result[0]) {
+                    return repo.changePassword(user_id, req_body.new_password)
+                }
+                return Promise.reject(new Err.BadRequest('ERR_WRONG_PASSWORD'));
+            })
+            .then(() => {
+                res.end()
+            })
+            .catch(err => next(err))
+
     }
 
 };

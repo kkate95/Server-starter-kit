@@ -12,4 +12,6 @@ router.post('/register', validate(schema.registration), userHandler.registration
 router.post('/login', validate(schema.login), userHandler.login);
 router.post('/logout', validate(schema.logout), userHandler.logout);
 
+router.put('/password/change', validate(schema.change_password), userHandler.changePassword);
+
 module.exports = router;

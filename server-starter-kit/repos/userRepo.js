@@ -26,6 +26,20 @@ module.exports = {
     logoutUser: (refresh_token) =>
         query(
             `DELETE FROM refresh_tokens WHERE token = $1`, [refresh_token]
-        )
+        ),
+
+    checkUserPassword: (user_id, old_password) =>
+        query(
+            `SELECT id
+             FROM users
+             WHERE id = $1 AND password = crpt.crypt($2, password)
+            `, [user_id, old_password]
+        ),
+
+    changePassword: (user_id, new_password) =>
+        query(`UPDATE users 
+                SET password = crpt.crypt($2, crpt.gen_salt('bf'))
+                WHERE id = $1
+            `, [user_id, new_password])
 
 };
