@@ -14,6 +14,12 @@ let schema = {
             last_name :   common.string.required(),
             first_name :  common.string.required()
         }
+    },
+
+    logout: {
+        body: {
+            refresh_token: common.refresh_token.required()
+        }
     }
 
 };

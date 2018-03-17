@@ -1,7 +1,8 @@
 let repo = require('../repos/userRepo'),
     randomstring = require('randomstring'),
     jwt = require('jsonwebtoken'),
-    Err = require('../utils/errors');
+    Err = require('../utils/errors'),
+    MessageService = require('../utils/SendMessage');
 
 module.exports = {
 
@@ -12,7 +13,7 @@ module.exports = {
             .then(data => {
                 if (data[0]) {
                     user_id = data[0].id;
-                    access_token = jwt.sign({id: data[0].id}, process.env.JWT_SECRET_KEY);
+                    access_token = jwt.sign({id: data[0].id}, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_LIFETIME });
                     refresh_token = `${data[0].id}.${randomstring.generate(60)}`;
                     return repo.insertRefreshToken(data[0].id, refresh_token);
                 }
@@ -26,7 +27,7 @@ module.exports = {
     },
 
     registration: (req, res, next) => {
-        let reg_token = randomstring.generate(12);
+        let reg_token = randomstring.generate(60);
         let req_body = req.body;
 
         repo.checkEmailExists(req_body.email)
@@ -38,8 +39,17 @@ module.exports = {
                 return Promise.reject(new Err.AlreadyExist('ERR_EMAIL_ALREADY_EXIST'));
             })
             .then(() => {
+                return MessageService.sendConfirmEmail(req_body.email, reg_token);
+            })
+            .then(() => {
                 res.end()
             })
+            .catch(err => next(err))
+    },
+
+    logout: (req, res, next) => {
+        repo.logoutUser(req.body.refresh_token)
+            .then(() => res.end() )
             .catch(err => next(err))
     }
 

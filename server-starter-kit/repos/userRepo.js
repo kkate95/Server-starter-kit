@@ -21,6 +21,11 @@ module.exports = {
     insertRefreshToken: (user_id, token) =>
         query(`
             INSERT INTO refresh_tokens(user_id, token) VALUES ($1, $2)
-        `, [user_id, token])
+        `, [user_id, token]),
+
+    logoutUser: (refresh_token) =>
+        query(
+            `DELETE FROM refresh_tokens WHERE token = $1`, [refresh_token]
+        )
 
 };
