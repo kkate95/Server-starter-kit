@@ -1,9 +1,8 @@
 let Joi = require('joi');
 
 module.exports = {
-
-    login: Joi.string(),
-    password: Joi.string()
-
+    password:       Joi.string(),
+    email:          Joi.string().email(),
+    string:         Joi.string(),
 };
 

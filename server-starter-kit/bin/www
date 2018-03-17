@@ -15,7 +15,7 @@ let server = http.createServer(app);
 db.init()
     .then(() => {
         server.listen(port);
-        logger.info('Server is running');
+        logger.info('Server is running on port ', port);
     })
     .catch(err => {
         logger.error(err);

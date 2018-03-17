@@ -25,10 +25,17 @@ class TokenError extends BaseError {
     }
 }
 
+class AlreadyExistError extends BaseError {
+    constructor(code, msg) {
+        super(409, code || 'ERR_ALREADY_EXIST', msg || Message[code ? code : 'ERR_ALREADY_EXIST']);
+    }
+}
+
 
 module.exports = {
     NotFound: NotFoundError,
     BadRequest: BadRequestError,
     Internal: InternalError,
-    Token: TokenError
+    Token: TokenError,
+    AlreadyExist: AlreadyExistError
 };

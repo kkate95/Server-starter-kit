@@ -5,8 +5,7 @@ let express = require('express'),
      bodyParser = require('body-parser'),
      logger = require('./utils/logger');
 
-let index = require('./routes/index'),
-    users = require('./routes/users');
+let routes = require('./routes/index');
 
 let Err = require('./utils/errors'),
     BaseError = require('./utils/errors/BaseError');
@@ -26,9 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*******************************************ROUTES*******************************/
-app.use('/', index);
-app.use('/users', users);
-
+app.use('/', routes);
 
 app.use(function(req, res, next) {
     next(new Err.NotFound('ERR_ROUTE_NOT_FOUND'));

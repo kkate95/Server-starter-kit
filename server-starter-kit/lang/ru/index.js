@@ -16,12 +16,14 @@ let generalCodes = {
     ERR_TOKEN_EXPIRED:                              'Token устарел',
 
     ERR_ALREADY_EXIST:                              'Уже существует',
-    
+    ERR_EMAIL_ALREADY_EXIST:                        'Пользователь с данным email уже существует',
+
     ERR_WRONG_FILE_SIZE:                            'Не верный размер файла',
     ERR_WRONG_FILE_TYPE:                            'Не поддерживаемый тип файла',
 
     ERR_QUERY_FAILED:                               "Ошибка при выполнении запроса к БД",
     ERR_BAD_REQUEST:                                "Неверные данные при запросе",
+    ERR_WRONG_LOGIN_OR_PASSWORD:                    "Неверный логин или пароль",
 
     ERR_INTERNAL:                                   "Ошибка на сервере",
 
