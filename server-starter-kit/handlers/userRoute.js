@@ -50,6 +50,30 @@ module.exports = {
             .catch(err => next(err))
     },
 
+    confirmEmail: (req, res, next) => {
+        repo.checkRegToken(req.query.token)
+            .then(result => {
+                if (result[0]) {
+                    return repo.confirmEmail(result[0].id)
+                        .then(() => true)
+                }
+                return false
+            })
+            .then(isUserConfirmed => {
+                if (isUserConfirmed) {
+                    return res.render(
+                        'confirmEmail',
+                        {title: 'Подтверждение email', confirm_text: 'Email подтверждён'}
+                    )
+                }
+                res.render(
+                    'confirmEmail',
+                    {title: 'Подтверждение email', confirm_text: 'Ссылка устарела'}
+                )
+            })
+            .catch(err => next(err))
+    },
+
     logout: (req, res, next) => {
         repo.logoutUser(req.body.refresh_token)
             .then(() => res.end() )

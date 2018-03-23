@@ -18,6 +18,21 @@ module.exports = {
             VALUES($1, $2,  crpt.crypt($3, crpt.gen_salt('bf')), $4, $5)
          `, [first_name, last_name, password, email, reg_token]),
 
+    checkRegToken: (reg_token) =>
+        query(`
+            SELECT id
+            FROM users
+            WHERE reg_token = $1
+        `, [reg_token]),
+
+    confirmEmail: (user_id) =>
+        query(`
+            UPDATE users
+            SET
+                is_confirmed = true, reg_token = 'EXPIRED'
+            WHERE id = $1
+        `, [user_id]),
+
     insertRefreshToken: (user_id, refresh_token, refresh_expires_date) =>
         query(`
             INSERT INTO refresh_tokens(user_id, token, expired_at) VALUES ($1, $2, $3)

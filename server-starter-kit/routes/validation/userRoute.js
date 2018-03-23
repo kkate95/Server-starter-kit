@@ -16,6 +16,12 @@ let schema = {
         }
     },
 
+    confirmEmail: {
+        query: {
+            token: common.string.required()
+        }
+    },
+
     logout: {
         body: {
             refresh_token: common.refresh_token.required()
