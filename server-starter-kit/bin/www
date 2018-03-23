@@ -23,6 +23,28 @@ db.init()
     });
 
 
+let signals = {
+    'SIGHUP': 1,
+    'SIGINT': 2,
+    'SIGTERM': 15
+};
+
+const shutdown = (signal, value) => {
+    server.close(() => {
+        logger.info(`server stopped by ${signal} with value ${value}`);
+        process.exit(128 + value);
+    });
+};
+
+Object.keys(signals).forEach((signal) => {
+    process.on(signal, () => {
+        logger.info(`process received a ${signal} signal`);
+        shutdown(signal, signals[signal]);
+    });
+});
+
+
+
 server.on('error', onError);
 server.on('listening', onListening);
 

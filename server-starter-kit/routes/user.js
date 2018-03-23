@@ -10,6 +10,7 @@ let express = require('express'),
 router.get('/confirm/email', validate(schema.confirmEmail), userHandler.confirmEmail);
 
 router.post('/register', validate(schema.registration), userHandler.registration);
+
 router.post('/login', validate(schema.login), userHandler.login);
 router.post('/logout', validate(schema.logout), userHandler.logout);
 
