@@ -12,7 +12,8 @@ let schema = {
         body: {
             email:        common.email.required(),
             last_name :   common.string.required(),
-            first_name :  common.string.required()
+            first_name :  common.string.required(),
+            password:     common.password.required()
         }
     },
 

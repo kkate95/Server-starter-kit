@@ -6,7 +6,7 @@ module.exports = {
         query(`
             SELECT *
             FROM users
-            WHERE email = $1 AND password = crpt.crypt($2, password)
+            WHERE email = $1 AND password = crpt.crypt($2, password) AND is_confirmed = true
         `, [email, password]),
 
     checkEmailExists: (email) =>
