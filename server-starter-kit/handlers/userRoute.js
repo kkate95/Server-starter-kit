@@ -2,20 +2,23 @@ let repo = require('../repos/userRepo'),
     randomstring = require('randomstring'),
     jwt = require('jsonwebtoken'),
     Err = require('../utils/errors'),
-    MessageService = require('../utils/SendMessage');
+    MessageService = require('../utils/SendMessage'),
+    moment = require('moment'),
+    commonUtil = require('../utils/common');
 
 module.exports = {
 
     login: (req, res, next) => {
-        let access_token, refresh_token, user_id;
+        let access_token, refresh_token, user_id, refresh_expires_date;
 
         repo.loginUser(req.body)
             .then(data => {
                 if (data[0]) {
                     user_id = data[0].id;
-                    access_token = jwt.sign({id: data[0].id}, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_LIFETIME });
+                    access_token = commonUtil.generateAccessToken(user_id);
+                    refresh_expires_date = moment().add(process.env.RESRESH_TOKEN_LIFETIME, 'years').format();
                     refresh_token = `${data[0].id}.${randomstring.generate(60)}`;
-                    return repo.insertRefreshToken(data[0].id, refresh_token);
+                    return repo.insertRefreshToken(data[0].id, refresh_token, refresh_expires_date);
                 }
 
                 return Promise.reject(new Err.BadRequest('ERR_WRONG_LOGIN_OR_PASSWORD'));
@@ -55,7 +58,7 @@ module.exports = {
 
     changePassword: (req, res, next) => {
         let req_body = req.body;
-        let user_id = parseInt(req_body.refresh_token.split('.')[0], 10);
+        let user_id = parseInt(req.user.id, 10);
 
         repo.checkUserPassword(user_id, req_body.old_password)
             .then(result => {
@@ -68,7 +71,33 @@ module.exports = {
                 res.end()
             })
             .catch(err => next(err))
+    },
 
+    getAccessToken: (req, res, next) => {
+        let access_token;
+        repo.checkResfreshToken(req.body)
+            .then((result) => {
+                if (result[0]) {
+                    let user_id = result[0].user_id;
+                    return access_token = commonUtil.generateAccessToken(user_id);
+                }
+                return Promise.reject(new Err.Token('ERR_REFRESH_TOKEN_EXPIRED'));
+            })
+            .then(access_token => {
+                res.json({access_token})
+            })
+            .catch(err => next(err));
+    },
+
+    getUserProfile: (req, res, next) => {
+        repo.getUserProfile(req.user.id)
+            .then(result => {
+                if (result[0]) {
+                    return res.json(result[0])
+                }
+                return Promise.reject(new Err.NotFound('ERR_USER_NOT_FOUND'))
+            })
+            .catch(err => next(err))
     }
 
 };

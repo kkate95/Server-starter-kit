@@ -13,15 +13,15 @@ module.exports = {
         query(`SELECT id FROM users WHERE email = $1`, [email]),
 
     registerUser: ({first_name, last_name, password, email}, reg_token) =>
-         query(`
+        query(`
             INSERT INTO users(first_name, last_name, password, email, reg_token)
             VALUES($1, $2,  crpt.crypt($3, crpt.gen_salt('bf')), $4, $5)
          `, [first_name, last_name, password, email, reg_token]),
 
-    insertRefreshToken: (user_id, token) =>
+    insertRefreshToken: (user_id, refresh_token, refresh_expires_date) =>
         query(`
-            INSERT INTO refresh_tokens(user_id, token) VALUES ($1, $2)
-        `, [user_id, token]),
+            INSERT INTO refresh_tokens(user_id, token, expired_at) VALUES ($1, $2, $3)
+        `, [user_id, refresh_token, refresh_expires_date]),
 
     logoutUser: (refresh_token) =>
         query(
@@ -40,6 +40,20 @@ module.exports = {
         query(`UPDATE users 
                 SET password = crpt.crypt($2, crpt.gen_salt('bf'))
                 WHERE id = $1
-            `, [user_id, new_password])
+            `, [user_id, new_password]),
+
+    checkResfreshToken: ({ refresh_token }) =>
+        query(`
+            SELECT user_id
+            FROM refresh_tokens
+            WHERE refresh_token = $1 and expired_at >= now()
+        `, [refresh_token]),
+
+    getUserProfile: (access_token) =>
+        query(`
+            SELECT id, first_name, last_name, email
+            FROM users
+            WHERE id = $1
+        `, [access_token])
 
 };

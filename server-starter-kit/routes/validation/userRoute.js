@@ -28,6 +28,12 @@ let schema = {
             new_password: common.password.required(),
             refresh_token: common.refresh_token.required()
         }
+    },
+
+    getAccessToken: {
+        body: {
+            refresh_token: common.refresh_token.required()
+        }
     }
 
 };

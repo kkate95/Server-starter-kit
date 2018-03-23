@@ -3,7 +3,10 @@ let express = require('express'),
      favicon = require('serve-favicon'),
      morgan = require('morgan'),
      bodyParser = require('body-parser'),
-     logger = require('./utils/logger');
+     logger = require('./utils/logger'),
+    commonUtil = require('./utils/common'),
+    passport = require('passport'),
+    BearerStrategy = require('passport-http-bearer').Strategy;
 
 let routes = require('./routes/index');
 
@@ -24,6 +27,13 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+
+passport.use(new BearerStrategy({ passReqToCallback: true },
+    (req, token, done) => commonUtil.getDataFromAccessToken(token)
+        .then(user => Promise.resolve(done(null, user)))
+        .catch(err => done(err))
+));
 
 /* *********************************** ROUTES ****************************** */
 app.use('/', routes);
