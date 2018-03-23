@@ -1,5 +1,5 @@
 
-require('dotenv').config({ path: './server-starter-kit/config/.env', silent: 'true' });
+require('dotenv').config({ path: process.env.ENV_FILE, silent: 'true' });
 
 let app = require('../app'),
      debug = require('debug')('server-starter-kit:server'),
