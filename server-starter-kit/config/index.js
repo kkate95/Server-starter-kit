@@ -8,6 +8,8 @@ module.exports = {
             user: process.env.SUPPORT_EMAIL_USERNAME,
             pass: process.env.SUPPORT_EMAIL_PASSWORD
         }
-    }
+    },
+
+    defaultLanguage: 'en'
 
 };

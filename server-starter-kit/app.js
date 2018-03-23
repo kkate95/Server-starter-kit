@@ -5,6 +5,7 @@ let express = require('express'),
      bodyParser = require('body-parser'),
      logger = require('./utils/logger'),
     commonUtil = require('./utils/common'),
+    config = require('./config'),
     passport = require('passport'),
     BearerStrategy = require('passport-http-bearer').Strategy;
 
@@ -12,7 +13,8 @@ let routes = require('./routes/index');
 
 let Err = require('./utils/errors'),
     BaseError = require('./utils/errors/BaseError'),
-    ev = require('express-validation');
+    ev = require('express-validation'),
+    langMessage = require('./lang');
 
 
 let app = express();
@@ -79,11 +81,19 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+    let lang = req.headers['accept-language'];
+
     logger.error(err);
 
     if (!(err instanceof BaseError)) {
         err = new Err.Internal('ERR_INTERNAL');
     }
+
+    if (!langMessage[lang]) {
+        lang = config.defaultLanguage;
+    }
+
+    err.Message = langMessage[lang][err.code];
 
     res.status(err.status || 500).json(err);
 });
