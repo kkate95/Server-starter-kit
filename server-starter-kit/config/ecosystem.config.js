@@ -11,6 +11,15 @@ module.exports = {
                 "NODE_ENV": "production",
                 "ENV_FILE": "./config/.env",
             },
-        }
+        },
+        {
+            name        : "REFRESH_TOKEN_SERVICE",
+            script      : "./bin/refreshTokens.js",
+            exec_mode   : "fork",
+            env: {
+                "NODE_ENV": "production",
+                "ENV_FILE": "./config/.env"
+            },
+        },
     ]
 };

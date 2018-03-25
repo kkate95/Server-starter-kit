@@ -22,7 +22,6 @@ db.init()
         process.exit(1);
     });
 
-
 let signals = {
     'SIGHUP': 1,
     'SIGINT': 2,
@@ -42,8 +41,6 @@ Object.keys(signals).forEach((signal) => {
         shutdown(signal, signals[signal]);
     });
 });
-
-
 
 server.on('error', onError);
 server.on('listening', onListening);
