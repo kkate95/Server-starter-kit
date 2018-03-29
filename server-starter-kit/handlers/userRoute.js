@@ -1,6 +1,5 @@
 let repo = require('../repos/userRepo'),
     randomstring = require('randomstring'),
-    jwt = require('jsonwebtoken'),
     Err = require('../utils/errors'),
     MessageService = require('../utils/SendMessage'),
     moment = require('moment'),

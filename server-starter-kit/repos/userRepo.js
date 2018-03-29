@@ -1,4 +1,4 @@
-let { query } = require('../utils/db'),
+let query = require('./query'),
     sql = require('../sql/userRepo');
 
 module.exports = {

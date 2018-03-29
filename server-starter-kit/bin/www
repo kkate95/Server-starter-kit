@@ -2,10 +2,10 @@
 require('dotenv').config({ path: process.env.ENV_FILE, silent: 'true' });
 
 let app = require('../app'),
-     debug = require('debug')('server-starter-kit:server'),
-     http = require('http'),
-     logger = require('../utils/logger'),
-     db = require('../utils/db');
+    debug = require('debug')('server-starter-kit:server'),
+    http = require('http'),
+    logger = require('../utils/logger'),
+    db = require('../utils/db');
 
 let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
