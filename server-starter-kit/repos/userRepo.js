@@ -1,74 +1,60 @@
-let { query } = require('../utils/db');
+let { query } = require('../utils/db'),
+    sql = require('../sql/userRepo');
 
 module.exports = {
 
-    loginUser: ({email, password}) =>
-        query(`
-            SELECT *
-            FROM users
-            WHERE email = $1 AND password = crpt.crypt($2, password) AND is_confirmed = true
-        `, [email, password]),
+    loginUser: ({email, password}) => {
+        let {text, params} = sql.loginUser(email, password);
+        return query(text, params);
+    },
 
-    checkEmailExists: (email) =>
-        query(`SELECT id FROM users WHERE email = $1`, [email]),
+    checkEmailExists: (email) => {
+        let {text, params} = sql.checkEmailExists(email);
+        return query(text, params);
+    },
 
-    registerUser: ({first_name, last_name, password, email}, reg_token) =>
-        query(`
-            INSERT INTO users(first_name, last_name, password, email, reg_token)
-            VALUES($1, $2,  crpt.crypt($3, crpt.gen_salt('bf')), $4, $5)
-         `, [first_name, last_name, password, email, reg_token]),
+    registerUser: ({first_name, last_name, password, email}, reg_token) => {
+        let {text, params} = sql.registerUser({first_name, last_name, password, email}, reg_token);
+        return query(text, params)
+    },
 
-    checkRegToken: (reg_token) =>
-        query(`
-            SELECT id
-            FROM users
-            WHERE reg_token = $1
-        `, [reg_token]),
+    checkRegToken: (reg_token) => {
+        let {text, params} = sql.checkRegToken(reg_token);
+        return query(text, params);
+    },
 
-    confirmEmail: (user_id) =>
-        query(`
-            UPDATE users
-            SET
-                is_confirmed = true, reg_token = 'EXPIRED'
-            WHERE id = $1
-        `, [user_id]),
+    confirmEmail: (user_id) => {
+        let {text, params} = sql.confirmEmail(user_id);
+        return query(text, params);
+    },
 
-    insertRefreshToken: (user_id, refresh_token, refresh_expires_date) =>
-        query(`
-            INSERT INTO refresh_tokens(user_id, token, expired_at) VALUES ($1, $2, $3)
-        `, [user_id, refresh_token, refresh_expires_date]),
+    insertRefreshToken: (user_id, refresh_token, refresh_expires_date) => {
+        let {text, params} = sql.insertRefreshToken(user_id, refresh_token, refresh_expires_date);
+        return query(text, params);
+    },
 
-    logoutUser: (refresh_token) =>
-        query(
-            `DELETE FROM refresh_tokens WHERE token = $1`, [refresh_token]
-        ),
+    logoutUser: (refresh_token) => {
+        let {text, params} = sql.logoutUser(refresh_token);
+        return query(text, params);
+    },
 
-    checkUserPassword: (user_id, old_password) =>
-        query(
-            `SELECT id
-             FROM users
-             WHERE id = $1 AND password = crpt.crypt($2, password)
-            `, [user_id, old_password]
-        ),
+    checkUserPassword: (user_id, old_password) => {
+        let {text, params} = sql.checkUserPassword(user_id, old_password);
+        return query(text, params);
+    },
 
-    changePassword: (user_id, new_password) =>
-        query(`UPDATE users 
-                SET password = crpt.crypt($2, crpt.gen_salt('bf'))
-                WHERE id = $1
-            `, [user_id, new_password]),
+    changePassword: (user_id, new_password) => {
+        let {text, params} = sql.changePassword(user_id, new_password);
+        return query(text, params);
+    },
 
-    checkResfreshToken: ({ refresh_token }) =>
-        query(`
-            SELECT user_id
-            FROM refresh_tokens
-            WHERE refresh_token = $1 and expired_at >= now()
-        `, [refresh_token]),
+    checkResfreshToken: ({ refresh_token }) => {
+        let {text, params} = sql.checkResfreshToken(refresh_token);
+        return query(text, params);
+    },
 
-    getUserProfile: (access_token) =>
-        query(`
-            SELECT id, first_name, last_name, email
-            FROM users
-            WHERE id = $1
-        `, [access_token])
-
+    getUserProfile: (access_token) => {
+        let {text, params} = sql.getUserProfile(access_token);
+        return query(text, params);
+    }
 };
