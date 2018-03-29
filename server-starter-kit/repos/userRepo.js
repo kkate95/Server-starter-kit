@@ -48,8 +48,8 @@ module.exports = {
         return query(text, params);
     },
 
-    checkResfreshToken: ({ refresh_token }) => {
-        let {text, params} = sql.checkResfreshToken(refresh_token);
+    checkRefreshToken: ({ refresh_token }) => {
+        let {text, params} = sql.checkRefreshToken(refresh_token);
         return query(text, params);
     },
 

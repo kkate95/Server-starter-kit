@@ -79,7 +79,7 @@ module.exports = {
         params: [user_id, new_password]
     }),
 
-    checkResfreshToken: (refresh_token) => ({
+    checkRefreshToken: (refresh_token) => ({
         text: `
             SELECT user_id
             FROM refresh_tokens
