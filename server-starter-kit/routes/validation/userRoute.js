@@ -38,7 +38,7 @@ let schema = {
     },
 
     getAccessToken: {
-        body: {
+        query: {
             refresh_token: common.refresh_token.required()
         }
     }

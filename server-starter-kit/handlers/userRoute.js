@@ -98,7 +98,7 @@ module.exports = {
 
     getAccessToken: (req, res, next) => {
         let access_token;
-        repo.checkRefreshToken(req.body)
+        repo.checkRefreshToken(req.query)
             .then((result) => {
                 if (result[0]) {
                     let user_id = result[0].user_id;
